@@ -29,7 +29,7 @@ async function userFromSession(request, response = null) {
   const otoUser = request.header("Otoroshi-User");
   if (otoUser) {
     const otoInfos = JWT.decode(otoUser)
-    console.log('otoInfos', otoInfos);
+    console.log('in otoroshi mode', otoInfos);
     if (otoInfos.user) {
       const cleanUsername = otoInfos.user.email.replace(/@/g, '_').replace(/\./g, '_').toLowerCase()
       console.log('otoroshiinfos', otoInfos, cleanUsername)
@@ -46,6 +46,8 @@ async function userFromSession(request, response = null) {
         return newUser;
       }
     }
+  } else {
+    console.log('no in otoroshi mode')
   }
 
   if (!!response && !!response.locals?.user) {

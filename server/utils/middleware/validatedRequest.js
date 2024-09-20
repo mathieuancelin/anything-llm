@@ -8,10 +8,13 @@ async function validatedRequest(request, response, next) {
 
   const oto = request.header("Otoroshi-User");
   if (oto) {
+    console.log('validate otoroshi')
     next();
     return;
+  } else {
+    console.log('no validate otoroshi')
   }
-  
+
   const multiUserMode = await SystemSettings.isMultiUserMode();
   response.locals.multiUserMode = multiUserMode;
   if (multiUserMode)

@@ -228,6 +228,7 @@ async function streamChatWithWorkspace(
     );
     completeText = await LLMConnector.getChatCompletion(messages, {
       temperature: workspace?.openAiTemp ?? LLMConnector.defaultTemp,
+      user: user || { username: 'root' }
     });
     writeResponseChunk(response, {
       uuid,
@@ -238,8 +239,10 @@ async function streamChatWithWorkspace(
       error: false,
     });
   } else {
+    console.log("lkjlkjlkjlkjlkj", user || { username: 'root' })
     const stream = await LLMConnector.streamGetChatCompletion(messages, {
       temperature: workspace?.openAiTemp ?? LLMConnector.defaultTemp,
+      user: user || { username: 'root' }
     });
     completeText = await LLMConnector.handleStream(response, stream, {
       uuid,
