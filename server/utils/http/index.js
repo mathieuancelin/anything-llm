@@ -25,6 +25,29 @@ function makeJWT(info = {}, expiry = "30d") {
 // Note: Only valid for finding users in multi-user mode
 // as single-user mode with password is not a "user"
 async function userFromSession(request, response = null) {
+
+  const otoUser = request.header("Otoroshi-User");
+  if (otoUser) {
+    const otoInfos = JWT.decode(otoUser)
+    console.log('otoInfos', otoInfos);
+    if (otoInfos.user) {
+      const cleanUsername = otoInfos.user.email.replace(/@/g, '_').replace(/\./g, '_').toLowerCase()
+      console.log('otoroshiinfos', otoInfos, cleanUsername)
+      const existing = await User.where({ username: cleanUsername }, 1);
+      console.log('existing', existing)
+      if (existing.length > 0) {
+        return existing[0];
+      } else {
+        const newUser = await User.create({
+          username: cleanUsername, 
+          password: "=;lmlksd,f mqsldknjnk l:k,"
+        });
+        console.log('nope, creating', newUser)
+        return newUser;
+      }
+    }
+  }
+
   if (!!response && !!response.locals?.user) {
     return response.locals.user;
   }

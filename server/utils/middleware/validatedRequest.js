@@ -5,6 +5,13 @@ const { decodeJWT } = require("../http");
 const EncryptionMgr = new EncryptionManager();
 
 async function validatedRequest(request, response, next) {
+
+  const oto = request.header("Otoroshi-User");
+  if (oto) {
+    next();
+    return;
+  }
+  
   const multiUserMode = await SystemSettings.isMultiUserMode();
   response.locals.multiUserMode = multiUserMode;
   if (multiUserMode)
