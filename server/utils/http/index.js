@@ -36,14 +36,15 @@ async function userFromSession(request, response = null) {
       const existing = await User.where({ username: cleanUsername }, 1);
       console.log('existing', existing)
       if (existing.length > 0) {
-        return existing[0];
+        const user = existing[0];
+        return { ...user, cookie: request.header("cookie"), otoInfos };
       } else {
         const newUser = await User.create({
           username: cleanUsername, 
           password: "=;lmlksd,f mqsldknjnk l:k,"
         });
         console.log('nope, creating', newUser)
-        return newUser;
+        return { ...newUser, cookie: request.header("cookie"), otoInfos };
       }
     }
   } else {

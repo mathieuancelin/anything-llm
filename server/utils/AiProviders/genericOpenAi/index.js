@@ -98,7 +98,7 @@ class GenericOpenAiLLM {
         temperature,
         max_tokens: this.maxTokens,
         allm_user: user,
-      })
+      }, { headers: { cookie: user.cookie }})
       .catch((e) => {
         throw new Error(e.message);
       });
@@ -116,7 +116,7 @@ class GenericOpenAiLLM {
       temperature,
       max_tokens: this.maxTokens,
       allm_user: user,
-    });
+    }, { headers: { cookie: user.cookie }});
     return streamRequest;
   }
 
